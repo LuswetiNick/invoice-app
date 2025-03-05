@@ -25,8 +25,15 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
+import { redirect } from "next/navigation";
 
 const LoginForm = () => {
+  const { data: session } = authClient.useSession();
+
+  if (session?.user) {
+    redirect("/dashboard");
+  }
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -40,7 +47,7 @@ const LoginForm = () => {
       await authClient.signIn.magicLink(
         {
           email: values.email,
-          callbackURL: "/",
+          callbackURL: "/verify",
         },
         {
           onRequest: () => {
