@@ -26,8 +26,10 @@ import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const { data: session } = authClient.useSession();
 
   if (session?.user) {
@@ -47,7 +49,7 @@ const LoginForm = () => {
       await authClient.signIn.magicLink(
         {
           email: values.email,
-          callbackURL: "/verify",
+          callbackURL: "/verified",
         },
         {
           onRequest: () => {
@@ -55,7 +57,8 @@ const LoginForm = () => {
           },
           onResponse: () => {
             setIsLoading(false);
-            toast.success("Check your email for the magic link.");
+            toast.success("Magic Link sent to your email");
+            router.push("/verify");
           },
           onError: (ctx) => {
             toast.error(ctx.error.message || "Something went wrong.");

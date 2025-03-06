@@ -1,6 +1,3 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,39 +7,31 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import { ArrowLeft, Mail } from "lucide-react";
 import Link from "next/link";
-
-const Verify = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (!session?.user) {
-    redirect("/login");
-  }
+const Verify = () => {
   return (
-    <Card className="text-center">
-      <CardHeader>
-        <div className="flex justify-center mb-2">
-          <CheckCircle className="h-10 w-10 text-green-500" />
+    <Card>
+      <CardHeader className="space-y-1 items-center text-center">
+        <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-2">
+          <Mail className="h-6 w-6 text-primary" />
         </div>
-        <CardTitle className="text-2xl">Email Verified!</CardTitle>
+        <CardTitle className="text-2xl">Check your email</CardTitle>
         <CardDescription>
-          Your email has been successfully verified.
+          We've sent a verification link to the provided email address.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground text-sm">
-          Thank you for verifying your email address. Your account is now fully
-          activated.
+      <CardContent className="text-center space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Click the link in the email to verify your account and continue. If
+          you don't see the email, check your spam folder.
         </p>
       </CardContent>
-      <CardFooter className="flex flex-col gap-2">
-        <Button asChild className="w-full">
-          <Link href="/dashboard">Proceed to Dashboard</Link>
-        </Button>
-        <Button asChild variant="outline" className="w-full">
-          <Link href="/">Return to Home</Link>
+      <CardFooter className="flex flex-col space-y-2">
+        <Button className="w-full" asChild variant="outline">
+          <Link href="/">
+            <ArrowLeft /> Back to Home
+          </Link>
         </Button>
       </CardFooter>
     </Card>
